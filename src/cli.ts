@@ -5,14 +5,16 @@ import { setup } from "./setup";
 import { WithdrawalClient } from "./withdraw";
 import * as dotenv from "dotenv";
 import { setupEjectorDeployment } from "./deployment";
+import { runCommand } from "./utils";
 
-export default async function main(): Promise<void> {
+export async function startCli(): Promise<void> {
   dotenv.config();
 
   program
     .name("nocturne-ejector")
     .description("CLI for withdrawing from Nocturne post-shutdown")
-    .addCommand(withdraw);
+    .addCommand(withdraw)
+    .addCommand(exportSpendKey);
   await program.parseAsync(process.argv);
 }
 
@@ -60,19 +62,11 @@ const withdraw = new Command("withdraw")
     await localDeployment.teardown();
   });
 
-process.on("SIGINT", () => {
-  process.exit(1);
-});
-
-// ! HACK
-// ! in principle, there should be no hanging promises once `main()` resolves or rejects.
-// ! as a backstop, we manually call `process.exit()` to ensure the process actually exits
-// ! even if there's a bug somewhere that results in a hanging promise
-main()
-  .then(() => {
-    process.exit(0);
-  })
-  .catch((e) => {
-    console.log(`exited with error: ${e}`);
-    process.exit(1);
+const exportSpendKey = new Command("export-spend-key")
+  .summary("locally run the nocturne spend key exporter UI")
+  .description(
+    "The exporter UI allows you to get the spend key for nocturne accounts you own. Use this to get the `SPEND_PRIVATE_KEY` and then set it into your `.env` file."
+  )
+  .action(async () => {
+    await runCommand("yarn install && yarn dev --port 3000", `${__dirname}/../nocturne-ejector-ui`);
   });

@@ -1,3 +1,8 @@
 [submodule "nocturne-ejector-ui"]
 	path = nocturne-ejector-ui
 	url = git@github.com:nocturne-xyz/nocturne-ejector-ui.git
+	ignore = dirty
+[submodule "graph-node"]
+	path = graph-node
+	url = https://github.com/nocturne-xyz/graph-node.git
+	branch = dont-persist-volumes

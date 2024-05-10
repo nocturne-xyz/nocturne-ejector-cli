@@ -1,12 +1,32 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
-    "allowJs": true,
     "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2022", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": false,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "preserveSymlinks": true,
+    "preserveWatchOutput": true,
+    "pretty": false,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "target": "es2021",
+    "strict": true,
+    "allowJs": true,
+    "typeRoots": ["node_modules/@types", "types"]
   },
   "type": "module",
   "exclude": ["node_modules", "dist", "config"],
-  "include": ["index.ts", "src", "src/**/*.ts", "scripts/*.ts", "package.json"]
+  "include": ["index.ts", "src", "src/**/*.ts", "package.json"]
 }
