@@ -68,5 +68,6 @@ const exportSpendKey = new Command("export-spend-key")
     "The exporter UI allows you to get the spend key for nocturne accounts you own. Use this to get the `SPEND_PRIVATE_KEY` and then set it into your `.env` file."
   )
   .action(async () => {
+    console.log("starting spend key exporter UI at http://localhost:3000");
     await runCommand("yarn install && yarn dev --port 3000", `${__dirname}/../nocturne-ejector-ui`);
   });

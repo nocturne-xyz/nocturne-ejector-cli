@@ -985,6 +985,7 @@ __metadata:
     "@nocturne-xyz/config": ^1.7.3
     "@nocturne-xyz/contracts": ^3.0.0
     "@nocturne-xyz/core": ^3.4.0-alpha.0
+    "@nocturne-xyz/insertion-writer": ^0.5.15
     "@nocturne-xyz/local-prover": ^0.6.5-alpha.0
     "@nocturne-xyz/op-request-plugins": ^2.1.20-alpha.0
     "@nocturne-xyz/subgraph-sync-adapters": ^0.6.0-alpha.0
@@ -994,6 +995,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.20.0
     async-mutex: ^0.5.0
     commander: ^12.0.0
+    docker-compose: ^0.24.8
     dotenv: ^16.4.5
     eslint: ^7.32.0
     eslint-config-prettier: ^8.8.0
@@ -1006,6 +1008,26 @@ __metadata:
     typescript: ^4.8.4
   languageName: unknown
   linkType: soft
+
+"@nocturne-xyz/insertion-writer@npm:^0.5.15":
+  version: 0.5.15
+  resolution: "@nocturne-xyz/insertion-writer@npm:0.5.15"
+  dependencies:
+    "@nocturne-xyz/config": ^1.7.3
+    "@nocturne-xyz/core": ^3.3.0
+    "@nocturne-xyz/offchain-utils": ^0.6.5
+    "@nocturne-xyz/persistent-log": ^0.1.15
+    "@nocturne-xyz/subgraph-sync-adapters": ^0.5.3
+    commander: ^9.4.1
+    dotenv: ^16.0.3
+    ethers: ^5.7.2
+    ioredis: ^5.3.1
+    winston: ^3.8.2
+  bin:
+    insertion-writer-cli: dist/src/cli/index.js
+  checksum: 3eb28f0b23daf5c50927b04bd5922290e6b55795d9ad2919fa7b5c01abb2a5b2a1ee0c7f82f2cef6f316adcca8f989879166355a9c686769a896586bcf6c9acf
+  languageName: node
+  linkType: hard
 
 "@nocturne-xyz/local-prover@npm:^0.6.5-alpha.0":
   version: 0.6.5-alpha.0
@@ -1078,6 +1100,16 @@ __metadata:
     ioredis: ^5.3.1
     winston: ^3.10.0
   checksum: 3411649aa459721b9d45f2092766c2aa2319595067019fd04465f32a8300f924f47dc894bef04d9be40f8f98b8fb0d523352a9fccdfa8a752d2a4ad1160c5edd
+  languageName: node
+  linkType: hard
+
+"@nocturne-xyz/subgraph-sync-adapters@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "@nocturne-xyz/subgraph-sync-adapters@npm:0.5.3"
+  dependencies:
+    "@nocturne-xyz/core": ^3.3.0
+    winston: ^3.8.2
+  checksum: 7beb3266f4abf2d0d2bdc69b78872fb7d47ecebe584e53a35be838b47dd02cb9475d3e8160a874ba5355628ce6036ceccfa93dc80846386f4fb5226318ea8e18
   languageName: node
   linkType: hard
 
@@ -2901,6 +2933,15 @@ __metadata:
   dependencies:
     path-type: ^4.0.0
   checksum: fa05e18324510d7283f55862f3161c6759a3f2f8dbce491a2fc14c8324c498286c54282c1f0e933cb930da8419b30679389499b919122952a4f8592362ef4615
+  languageName: node
+  linkType: hard
+
+"docker-compose@npm:^0.24.8":
+  version: 0.24.8
+  resolution: "docker-compose@npm:0.24.8"
+  dependencies:
+    yaml: ^2.2.2
+  checksum: 48f3564c46490f1f51899a144deb546b61450a76bffddb378379ac7702aa34b055e0237e0dc77507df94d7ad6f1f7daeeac27730230bce9aafe2e35efeda6b45
   languageName: node
   linkType: hard
 
@@ -6492,6 +6533,15 @@ __metadata:
   version: 4.0.0
   resolution: "yallist@npm:4.0.0"
   checksum: 343617202af32df2a15a3be36a5a8c0c8545208f3d3dfbc6bb7c3e3b7e8c6f8e7485432e4f3b88da3031a6e20afa7c711eded32ddfb122896ac5d914e75848d5
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.2.2":
+  version: 2.4.2
+  resolution: "yaml@npm:2.4.2"
+  bin:
+    yaml: bin.mjs
+  checksum: 90dda4485de04367251face9abb5c36927c94e44078f4e958e6468a07e74e7e92f89be20fc49860b6268c51ee5a5fc79ef89197d3f874bf24ef8921cc4ba9013
   languageName: node
   linkType: hard
 
