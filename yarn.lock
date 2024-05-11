@@ -988,7 +988,7 @@ __metadata:
     "@nocturne-xyz/insertion-writer": ^0.5.15
     "@nocturne-xyz/local-prover": ^0.6.5-alpha.0
     "@nocturne-xyz/op-request-plugins": ^2.1.20-alpha.0
-    "@nocturne-xyz/subgraph-sync-adapters": ^0.6.0-alpha.0
+    "@nocturne-xyz/rpc-sync-adapters": ^0.4.0-alpha.0
     "@nocturne-xyz/subtree-updater": ^0.8.9
     "@types/node": ^18.8.0
     "@typescript-eslint/eslint-plugin": ^5.20.0
@@ -1103,6 +1103,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nocturne-xyz/rpc-sync-adapters@npm:^0.4.0-alpha.0":
+  version: 0.4.0-alpha.0
+  resolution: "@nocturne-xyz/rpc-sync-adapters@npm:0.4.0-alpha.0"
+  dependencies:
+    "@nocturne-xyz/contracts": ^3.0.0
+    "@nocturne-xyz/core": ^3.4.0-alpha.0
+    ethers: ^5.7.2
+  checksum: 1d394ed37337d6f0ba51f9c2272a40ce4184a7b592f9ef8faf4a9f9dab9a59565c1d15a98ac6a20cf387caab2f6e4e4730bd16df0ba0f735ec36af79aab69aec
+  languageName: node
+  linkType: hard
+
 "@nocturne-xyz/subgraph-sync-adapters@npm:^0.5.3":
   version: 0.5.3
   resolution: "@nocturne-xyz/subgraph-sync-adapters@npm:0.5.3"
@@ -1110,16 +1121,6 @@ __metadata:
     "@nocturne-xyz/core": ^3.3.0
     winston: ^3.8.2
   checksum: 7beb3266f4abf2d0d2bdc69b78872fb7d47ecebe584e53a35be838b47dd02cb9475d3e8160a874ba5355628ce6036ceccfa93dc80846386f4fb5226318ea8e18
-  languageName: node
-  linkType: hard
-
-"@nocturne-xyz/subgraph-sync-adapters@npm:^0.6.0-alpha.0":
-  version: 0.6.0-alpha.0
-  resolution: "@nocturne-xyz/subgraph-sync-adapters@npm:0.6.0-alpha.0"
-  dependencies:
-    "@nocturne-xyz/core": ^3.4.0-alpha.0
-    winston: ^3.8.2
-  checksum: e33c638f8dfa6f1b3eb4252e635c283d4f9db566f1e46483fc86582d59775cb19767d59a6fd282657c2c79d0b4b5a56912f83cab4748454be9d05bb3a90245fc
   languageName: node
   linkType: hard
 

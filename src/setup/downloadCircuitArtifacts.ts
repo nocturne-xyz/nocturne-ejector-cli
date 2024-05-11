@@ -11,25 +11,12 @@ export const CIRCUIT_ARTIFACTS = {
     zkey: "joinsplit/joinsplit.zkey",
     vkey: "joinsplit/joinsplitVkey.json",
   },
-  subtreeupdate: {
-    wasm: "subtreeupdate/subtreeupdate.wasm",
-    zkey: "subtreeupdate/subtreeupdate.zkey",
-    vkey: "subtreeupdate/subtreeupdateVkey.json",
-  },
 };
 
-export async function downloadCircuitArtifacts(
-  skipSubtreeUpdateCircuit: boolean
-): Promise<void> {
+export async function downloadCircuitArtifacts(): Promise<void> {
   await downloadFile(CIRCUIT_ARTIFACTS.joinSplit.wasm);
   await downloadFile(CIRCUIT_ARTIFACTS.joinSplit.zkey);
   await downloadFile(CIRCUIT_ARTIFACTS.joinSplit.vkey);
-
-  if (!skipSubtreeUpdateCircuit) {
-    await downloadFile(CIRCUIT_ARTIFACTS.subtreeupdate.wasm),
-      await downloadFile(CIRCUIT_ARTIFACTS.subtreeupdate.vkey),
-      await downloadFile(CIRCUIT_ARTIFACTS.subtreeupdate.zkey);
-  }
 }
 
 async function alreadyDownloadedFile(path: string): Promise<boolean> {

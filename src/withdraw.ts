@@ -16,8 +16,7 @@ import {
   Thunk,
   VerifyingKey,
 } from "@nocturne-xyz/core";
-import { SubgraphSDKSyncAdapter } from "@nocturne-xyz/subgraph-sync-adapters";
-import { ARTIFACTS_DIR, SUBGRAPH_URL } from "./utils";
+import { ARTIFACTS_DIR } from "./utils";
 import { ethers } from "ethers";
 import { getEnvVars } from "./env";
 import { MockOpTracker } from "@nocturne-xyz/client/dist/src/OpTracker";
@@ -28,6 +27,7 @@ import fs from "fs";
 import { CIRCUIT_ARTIFACTS } from "./setup/downloadCircuitArtifacts";
 import { Teller, Teller__factory } from "@nocturne-xyz/contracts";
 import { loadNocturneConfig, NocturneConfig } from "@nocturne-xyz/config";
+import { RPCSDKSyncAdapter } from "@nocturne-xyz/rpc-sync-adapters";
 
 export const GAS_MULTIPLIER = 0;
 
@@ -36,7 +36,7 @@ export class WithdrawalClient {
   eoa: ethers.Wallet;
   signer: NocturneSigner;
   client: NocturneClient;
-  syncAdapter: SubgraphSDKSyncAdapter;
+  syncAdapter: RPCSDKSyncAdapter;
   db: NocturneDB;
   config: NocturneConfig;
   teller: Teller;
@@ -45,11 +45,16 @@ export class WithdrawalClient {
 
   constructor(networkNameOrConfigPath = "mainnet") {
     const { RPC_URL, SPEND_PRIVATE_KEY } = getEnvVars();
-    this.db = new NocturneDB(new InMemoryKVStore());
-    this.syncAdapter = new SubgraphSDKSyncAdapter(SUBGRAPH_URL);
-    this.signer = new NocturneSigner(ethers.utils.arrayify(SPEND_PRIVATE_KEY));
+
+    this.config = loadNocturneConfig(networkNameOrConfigPath);
+
+    this.syncAdapter = new RPCSDKSyncAdapter(new ethers.providers.JsonRpcProvider(RPC_URL), this.config.handlerAddress);
+
     this.provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    this.signer = new NocturneSigner(ethers.utils.arrayify(SPEND_PRIVATE_KEY));
     this.eoa = new ethers.Wallet(SPEND_PRIVATE_KEY, this.provider);
+
+    this.db = new NocturneDB(new InMemoryKVStore());
     this.client = new NocturneClient(
       this.signer,
       this.provider,
@@ -60,8 +65,6 @@ export class WithdrawalClient {
       new MockEthToTokenConverter(),
       new MockOpTracker()
     );
-
-    this.config = loadNocturneConfig(networkNameOrConfigPath);
 
     this.teller = Teller__factory.connect(
       this.config.contracts.tellerProxy.proxy,
