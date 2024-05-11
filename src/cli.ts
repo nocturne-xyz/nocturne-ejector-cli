@@ -4,7 +4,6 @@ import { program, Command } from "commander";
 import { setup } from "./setup";
 import { WithdrawalClient } from "./withdraw";
 import * as dotenv from "dotenv";
-import { setupEjectorDeployment } from "./deployment";
 import { runCommand } from "./utils";
 
 export async function startCli(): Promise<void> {
@@ -24,42 +23,32 @@ const withdraw = new Command("withdraw")
     "must supply .env file with RPC_URL, SPEND_PRIVATE_KEY, and WITHDRAWAL_EOA_PRIVATE_KEY"
   )
   .option(
-    "--update-tree",
-    "if this option is set, the CLI will also run a subtree-updater and update the tree. 99.99% of the time you won't need this - it's only needed if, for some reason, not all of the nodes for an asset are spent at once. See the README for more information.",
-    false
-  )
-  .option(
     "--config-path",
     "path to the nocturne deployment config file. 99.99% of the time you wont need this - it's only needed if you want to interact with a secondary deployment of the nocturne contracts. See the README for more information."
   )
+  .option(
+    "--rpc-sync-throttle",
+    "minimum delay between RPC calls in milliseconds. This is useful for rate limiting your RPC calls to avoid getting rate limited by your RPC provider. Default is 1000ms",
+  )
   .action(async (options) => {
-    const { updateTree, configPath } = options;
+    const { configPath, rpcSyncThrottle } = options;
 
     // download any artifacts necessary for withdrawal, including circuits
-    await setup({ skipSubtreeUpdateCircuit: !updateTree });
+    await setup();
 
-    // setup local deployment of necessary offchain infra
-    // by default, this is just the subgraph.
-    // if updateTree is set, this will also run the subtree-updater and the insertion writer
-    const localDeployment = await setupEjectorDeployment({
-      updateTree,
-      networkNameOrConfigPath: configPath,
-    });
+    // instantiate the withdrawal client with given config
     const client = new WithdrawalClient(configPath);
 
     // sync all note balances into the withdrawal client
-    await client.sync();
+    console.log();
+    console.log("syncing notes from RPC node. This make take a while...")
+    console.log(`latest merkle index on-chain: ${await client.syncAdapter.getLatestIndexedMerkleIndex()}`);
 
-    // withdraw all notes of every asset owned by the nocturne acount with the provided spend private key
+    const throttleMs = (typeof rpcSyncThrottle === "string") ? parseInt(rpcSyncThrottle) : (rpcSyncThrottle ?? 1000);
+    await client.sync( { throttleMs });
+
+    // submit a single op that withdraws all notes of every asset owned by the nocturne acount with the provided spend key
     await client.withdrawEverything();
-
-    // if updateTree is set, fill a batch with zeros and wait for a subtree update to take place
-    if (updateTree) {
-      await localDeployment.fillSubtreeBatch();
-    }
-
-    // teardown local deployment after we're done
-    await localDeployment.teardown();
   });
 
 const exportSpendKey = new Command("export-spend-key")
