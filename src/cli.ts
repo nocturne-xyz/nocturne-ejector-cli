@@ -28,7 +28,7 @@ const withdraw = new Command("withdraw")
   )
   .option(
     "--rpc-sync-throttle",
-    "minimum delay between RPC calls in milliseconds. This is useful for rate limiting your RPC calls to avoid getting rate limited by your RPC provider. Default is 0",
+    "minimum delay between RPC calls in milliseconds. This is useful for rate limiting your RPC calls to avoid getting rate limited by your RPC provider. Default is 1000ms",
   )
   .action(async (options) => {
     const { configPath, rpcSyncThrottle } = options;
@@ -40,9 +40,12 @@ const withdraw = new Command("withdraw")
     const client = new WithdrawalClient(configPath);
 
     // sync all note balances into the withdrawal client
+    console.log();
     console.log("syncing notes from RPC node. This make take a while...")
-    console.log(`latest merkle index on-chain: ${await client.syncAdapter.getLatestIndexedMerkleIndex()}`)
-    await client.sync();
+    console.log(`latest merkle index on-chain: ${await client.syncAdapter.getLatestIndexedMerkleIndex()}`);
+
+    const throttleMs = (typeof rpcSyncThrottle === "string") ? parseInt(rpcSyncThrottle) : (rpcSyncThrottle ?? 1000);
+    await client.sync( { throttleMs });
 
     // submit a single op that withdraws all notes of every asset owned by the nocturne acount with the provided spend key
     await client.withdrawEverything();

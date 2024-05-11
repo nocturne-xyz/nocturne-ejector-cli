@@ -11,6 +11,7 @@ import {
   AssetType,
   InMemoryKVStore,
   JoinSplitProver,
+  maxGasForOperation,
   NocturneSigner,
   SparseMerkleProver,
   thunk,
@@ -50,9 +51,12 @@ export class WithdrawalClient {
 
     this.config = loadNocturneConfig(networkNameOrConfigPath);
 
-    this.syncAdapter = new RPCSDKSyncAdapter(new ethers.providers.JsonRpcProvider(RPC_URL), this.config.handlerAddress);
+    // use separate provider for syncing
+    // determine kind by checking prefix, assume websocket if not http
+    const syncProvider = RPC_URL.startsWith("http") ? new ethers.providers.JsonRpcBatchProvider(RPC_URL) : new ethers.providers.WebSocketProvider(RPC_URL);
+    this.syncAdapter = new RPCSDKSyncAdapter(syncProvider, this.config.handlerAddress);
 
-    this.provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    this.provider = RPC_URL.startsWith("http") ? new ethers.providers.JsonRpcBatchProvider(RPC_URL) : new ethers.providers.WebSocketProvider(RPC_URL);
     this.signer = new NocturneSigner(ethers.utils.arrayify(SPEND_PRIVATE_KEY));
     this.eoa = new ethers.Wallet(SPEND_PRIVATE_KEY, this.provider);
 
@@ -127,9 +131,12 @@ export class WithdrawalClient {
     );
 
     console.log("Submitting batch-withdrawal transaction...");
+    // Calculate total gas limit based on op data because eth_estimateGas is not predictable for
+    // processBundle
+    const gasLimit = maxGasForOperation(provenOp); 
     const tx = await this.teller.processBundle({
       operations: [provenOp],
-    });
+    }, { gasLimit });
     console.log(`Transaction submitted with hash: ${tx.hash}`);
     console.log("Waiting 3 confirmations...");
     await tx.wait(3);
