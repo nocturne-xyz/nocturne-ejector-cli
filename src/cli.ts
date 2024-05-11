@@ -26,8 +26,12 @@ const withdraw = new Command("withdraw")
     "--config-path",
     "path to the nocturne deployment config file. 99.99% of the time you wont need this - it's only needed if you want to interact with a secondary deployment of the nocturne contracts. See the README for more information."
   )
+  .option(
+    "--rpc-sync-throttle",
+    "minimum delay between RPC calls in milliseconds. This is useful for rate limiting your RPC calls to avoid getting rate limited by your RPC provider. Default is 0",
+  )
   .action(async (options) => {
-    const { configPath } = options;
+    const { configPath, rpcSyncThrottle } = options;
 
     // download any artifacts necessary for withdrawal, including circuits
     await setup();
@@ -36,6 +40,8 @@ const withdraw = new Command("withdraw")
     const client = new WithdrawalClient(configPath);
 
     // sync all note balances into the withdrawal client
+    console.log("syncing notes from RPC node. This make take a while...")
+    console.log(`latest merkle index on-chain: ${await client.syncAdapter.getLatestIndexedMerkleIndex()}`)
     await client.sync();
 
     // submit a single op that withdraws all notes of every asset owned by the nocturne acount with the provided spend key

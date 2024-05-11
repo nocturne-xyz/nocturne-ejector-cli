@@ -5,6 +5,7 @@ import {
   NocturneDB,
   proveOperation,
   signOperation,
+  SyncOpts,
 } from "@nocturne-xyz/client";
 import {
   AssetType,
@@ -14,6 +15,7 @@ import {
   SparseMerkleProver,
   thunk,
   Thunk,
+  TotalEntityIndexTrait,
   VerifyingKey,
 } from "@nocturne-xyz/core";
 import { ARTIFACTS_DIR } from "./utils";
@@ -55,6 +57,7 @@ export class WithdrawalClient {
     this.eoa = new ethers.Wallet(SPEND_PRIVATE_KEY, this.provider);
 
     this.db = new NocturneDB(new InMemoryKVStore());
+    this.db.setCurrentTotalEntityIndex(TotalEntityIndexTrait.fromBlockNumber(this.config.startBlock, "UP_TO"));
     this.client = new NocturneClient(
       this.signer,
       this.provider,
@@ -84,8 +87,8 @@ export class WithdrawalClient {
     });
   }
 
-  async sync(): Promise<void> {
-    await this.client.sync();
+  async sync(opts?: SyncOpts): Promise<void> {
+    await this.client.sync(opts);
   }
 
   async withdrawEverything(): Promise<void> {
