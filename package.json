@@ -31,7 +31,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@nocturne-xyz/client": "^4.1.2-alpha.0",
+    "@nocturne-xyz/client": "^4.1.2-alpha.1",
     "@nocturne-xyz/config": "^1.7.3",
     "@nocturne-xyz/contracts": "^3.0.0",
     "@nocturne-xyz/core": "^3.4.0-alpha.0",
