@@ -31,6 +31,7 @@ import { CIRCUIT_ARTIFACTS } from "./setup/downloadCircuitArtifacts";
 import { Teller, Teller__factory } from "@nocturne-xyz/contracts";
 import { loadNocturneConfig, NocturneConfig } from "@nocturne-xyz/config";
 import { RPCSDKSyncAdapter } from "@nocturne-xyz/rpc-sync-adapters";
+import inquirer from "inquirer";
 
 export const GAS_MULTIPLIER = 0;
 
@@ -47,7 +48,7 @@ export class WithdrawalClient {
   joinSplitProver: Thunk<JoinSplitProver>;
 
   constructor(networkNameOrConfigPath = "mainnet") {
-    const { RPC_URL, SPEND_PRIVATE_KEY } = getEnvVars();
+    const { RPC_URL, SPEND_PRIVATE_KEY, WITHDRAWAL_EOA_PRIVATE_KEY } = getEnvVars();
 
     this.config = loadNocturneConfig(networkNameOrConfigPath);
 
@@ -58,7 +59,7 @@ export class WithdrawalClient {
 
     this.provider = RPC_URL.startsWith("http") ? new ethers.providers.JsonRpcBatchProvider(RPC_URL) : new ethers.providers.WebSocketProvider(RPC_URL);
     this.signer = new NocturneSigner(ethers.utils.arrayify(SPEND_PRIVATE_KEY));
-    this.eoa = new ethers.Wallet(SPEND_PRIVATE_KEY, this.provider);
+    this.eoa = new ethers.Wallet(WITHDRAWAL_EOA_PRIVATE_KEY, this.provider);
 
     this.db = new NocturneDB(new InMemoryKVStore());
     this.db.setCurrentTotalEntityIndex(TotalEntityIndexTrait.fromBlockNumber(this.config.startBlock, "UP_TO"));
@@ -130,16 +131,33 @@ export class WithdrawalClient {
       signedOp
     );
 
-    console.log("Submitting batch-withdrawal transaction...");
+    console.log("estimating gas for batch-withdrawal transaction...");
     // Calculate total gas limit based on op data because eth_estimateGas is not predictable for
     // processBundle
     const gasLimit = maxGasForOperation(provenOp); 
-    const tx = await this.teller.processBundle({
-      operations: [provenOp],
-    }, { gasLimit });
-    console.log(`Transaction submitted with hash: ${tx.hash}`);
-    console.log("Waiting 3 confirmations...");
-    await tx.wait(3);
-    console.log("Withdrawal complete!");
+    const gasPrice = await this.provider.getGasPrice();
+    console.log("gas price:", gasPrice.toString());
+    console.log(`estimated gas limit: ${gasLimit.toString()} (${ethers.utils.formatEther((gasLimit * gasPrice.toBigInt()).toString())} ETH)`);
+    console.log("note: the gas limit is a very conservative estimate, in practice the gas cost will likely be lower");
+
+    await inquirer.prompt([{
+      type: "confirm",
+      name: "confirm",
+      message: "approve the transaction?",
+      default: false
+    }]).then(async (answers) => {
+      if (answers.confirm) {
+        console.log("submitting batch-withdrawal transaction...");
+        const tx = await this.teller.processBundle({
+          operations: [provenOp],
+        });
+        console.log(`transaction submitted with hash: ${tx.hash}`);
+        console.log("waiting 3 confirmations...");
+        await tx.wait(3);
+        console.log("withdrawal complete!");
+      } else {
+        console.log("withdrawal cancelled");
+      }
+    });
   }
 }
