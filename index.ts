@@ -5,6 +5,9 @@ async function main() {
   await startCli();
 }
 
+// ! HACK for some reason something in our code maxes out the event listeners. This just supresses the scary warning
+process.setMaxListeners(0);
+
 process.on("SIGINT", () => {
   process.exit(1);
 });

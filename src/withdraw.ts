@@ -104,6 +104,8 @@ export class WithdrawalClient {
     console.log(
       `Initializing batch-withdrawal to recipient: ${this.eoa.address}`
     );
+
+    let hasFundsToWithdraw = false;
     for (const { asset, balance } of balances) {
       // this should never happen since we only care about ERC20 assets
       if (asset.assetType !== AssetType.ERC20) {
@@ -117,7 +119,13 @@ export class WithdrawalClient {
       );
       if (balance > 0n) {
         builder.erc20Transfer(asset.assetAddr, this.eoa.address, balance);
+        hasFundsToWithdraw = true;
       }
+    }
+
+    if (!hasFundsToWithdraw) {
+      console.log("no funds to withdraw!");
+      return;
     }
 
     const opRequest = await builder.build();
@@ -150,7 +158,7 @@ export class WithdrawalClient {
         console.log("submitting batch-withdrawal transaction...");
         const tx = await this.teller.processBundle({
           operations: [provenOp],
-        });
+        }, { gasLimit });
         console.log(`transaction submitted with hash: ${tx.hash}`);
         console.log("waiting 3 confirmations...");
         await tx.wait(3);
