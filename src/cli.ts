@@ -47,6 +47,8 @@ const withdraw = new Command("withdraw")
     const throttleMs = (typeof rpcSyncThrottle === "string") ? parseInt(rpcSyncThrottle) : (rpcSyncThrottle ?? 1000);
     await client.sync( { throttleMs });
 
+    console.log('finished syncing')
+    console.log("withdrawing all funds from nocturne...")
     // submit a single op that withdraws all notes of every asset owned by the nocturne acount with the provided spend key
     await client.withdrawEverything();
   });
