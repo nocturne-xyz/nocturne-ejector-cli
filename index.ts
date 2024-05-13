@@ -1,7 +1,8 @@
-import { setup, startCli } from "./src/index";
+#!/usr/bin/env node
+
+import { startCli } from "./src/index";
 
 async function main() {
-  await setup();
   await startCli();
 }
 

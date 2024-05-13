@@ -1,10 +1,9 @@
 #! /usr/bin/env node
 
 import { program, Command } from "commander";
-import { setup } from "./setup";
 import { WithdrawalClient } from "./withdraw";
 import * as dotenv from "dotenv";
-import { runCommand } from "./utils";
+import { ROOT_DIR, runCommand } from "./utils";
 
 export async function startCli(): Promise<void> {
   dotenv.config();
@@ -33,9 +32,6 @@ const withdraw = new Command("withdraw")
   .action(async (options) => {
     const { configPath, rpcSyncThrottle } = options;
 
-    // download any artifacts necessary for withdrawal, including circuits
-    await setup();
-
     // instantiate the withdrawal client with given config
     const client = new WithdrawalClient(configPath);
 
@@ -60,5 +56,5 @@ const exportSpendKey = new Command("export-spend-key")
   )
   .action(async () => {
     console.log("starting spend key exporter UI at http://localhost:3000");
-    await runCommand("yarn install && yarn dev --port 3000", `${__dirname}/../nocturne-ejector-ui`);
+    await runCommand("yarn install && yarn dev --port 3000", `${ROOT_DIR}/nocturne-ejector-ui`);
   });

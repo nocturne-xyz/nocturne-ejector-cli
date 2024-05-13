@@ -8,6 +8,9 @@
     "dist/**/*",
     "src/**/*"
   ],
+  "bin": {
+    "nocturne-ejector-cli": "dist/index.js"
+  },
   "scripts": {
     "build": "yarn clean; tsc --build",
     "check": "yarn clean && tsc --noEmit",
@@ -40,14 +43,14 @@
     "@nocturne-xyz/op-request-plugins": "^2.1.20-alpha.0",
     "@nocturne-xyz/rpc-sync-adapters": "^0.3.6-alpha.1",
     "@nocturne-xyz/subtree-updater": "^0.8.9",
-    "@types/inquirer": "^9.0.7",
+    "@types/inquirer": "^8.0.0",
     "async-mutex": "^0.5.0",
     "commander": "^12.0.0",
     "docker-compose": "^0.24.8",
     "dotenv": "^16.4.5",
     "ethers": "^5.7.2",
     "got": "^12",
-    "inquirer": "^9.2.20",
+    "inquirer": "^8.0.0",
     "ioredis": "^5.3.1",
     "redis-memory-server": "^0.6.0"
   }

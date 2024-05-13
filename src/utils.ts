@@ -6,10 +6,18 @@ const execAsync = promisify(exec);
 export type TeardownFn = () => Promise<void>;
 export type ResetFn = () => Promise<void>;
 
-export const ROOT_DIR = `${__dirname}/..`;
+export const ROOT_DIR = `.`;
 export const ARTIFACTS_DIR = `${ROOT_DIR}/artifacts`;
 
 export const SUBGRAPH_URL = "http://localhost:8000/subgraphs/name/nocturne";
+
+export const CIRCUIT_ARTIFACTS = {
+  joinSplit: {
+    wasm: "joinsplit/joinsplit.wasm",
+    zkey: "joinsplit/joinsplit.zkey",
+    vkey: "joinsplit/joinsplitVkey.json",
+  },
+};
 
 export async function runCommand(
   cmd: string,
