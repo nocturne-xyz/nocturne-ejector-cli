@@ -6,6 +6,8 @@ Since [Nocturne is shutting down](TODO), all off-chain infrastructure run by Noc
 
 ### Prerequisites
 
+This CLI only works on Mac and Linux. If you're running Windows, [use WSL](https://learn.microsoft.com/en-us/windows/wsl/install) to run Linux.
+
 Before using this repo, you must have the following installed:
 * Node.Js version 18. This can be installed from the official website [here](https://nodejs.org/en/download).
 * `git`. If you don't already have it installed, you can find instructions for installing it [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)

@@ -3,7 +3,7 @@
 import { program, Command } from "commander";
 import { WithdrawalClient } from "./withdraw";
 import * as dotenv from "dotenv";
-import { runCommand } from "./utils";
+import { ROOT_DIR, runCommand } from "./utils";
 
 export async function startCli(): Promise<void> {
   dotenv.config();
@@ -56,5 +56,5 @@ const exportSpendKey = new Command("export-spend-key")
   )
   .action(async () => {
     console.log("starting spend key exporter UI at http://localhost:3000");
-    await runCommand("yarn install && yarn dev --port 3000", `${__dirname}/../nocturne-ejector-ui`);
+    await runCommand("yarn install && yarn dev --port 3000", `${ROOT_DIR}/nocturne-ejector-ui`);
   });
