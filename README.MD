@@ -26,7 +26,7 @@ And you must have access to the following:
 ### Setup
 
 1. open a terminal and clone the repo by running `git clone https://github.com/nocturne-xyz/nocturne-ejector-cli.git`
-2. move into the repo by running `cd nocturne-ejector-cli`
+2. move into the repo by running `cd nocturne-ejector-cli`.
 1. run `git submodule init`
 2. run `git submodule update --remote`
 3. run `corepack enable`
