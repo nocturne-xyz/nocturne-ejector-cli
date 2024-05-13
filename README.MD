@@ -28,6 +28,7 @@ After the cloning the repo, fire up a terminal and do the following to set up th
 2. run `git submodule update --remote`
 3. run `corepack enable`
 4. run `yarn install`
+5. run `npm i -g`
 
 ### Filling the `.env` file
 

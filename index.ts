@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { startCli } from "./src/index";
 
 async function main() {

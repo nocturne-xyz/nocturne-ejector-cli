@@ -19,7 +19,7 @@ import {
   TotalEntityIndexTrait,
   VerifyingKey,
 } from "@nocturne-xyz/core";
-import { ARTIFACTS_DIR } from "./utils";
+import { ARTIFACTS_DIR, CIRCUIT_ARTIFACTS } from "./utils";
 import { ethers } from "ethers";
 import { getEnvVars } from "./env";
 import { MockOpTracker } from "@nocturne-xyz/client/dist/src/OpTracker";
@@ -27,7 +27,6 @@ import { Erc20Plugin } from "@nocturne-xyz/op-request-plugins";
 import { WasmJoinSplitProver } from "@nocturne-xyz/local-prover";
 import path from "path";
 import fs from "fs";
-import { CIRCUIT_ARTIFACTS } from "./setup/downloadCircuitArtifacts";
 import { Teller, Teller__factory } from "@nocturne-xyz/contracts";
 import { loadNocturneConfig, NocturneConfig } from "@nocturne-xyz/config";
 import { RPCSDKSyncAdapter } from "@nocturne-xyz/rpc-sync-adapters";
@@ -98,6 +97,8 @@ export class WithdrawalClient {
 
   async withdrawEverything(): Promise<void> {
     const balances = await this.client.getAllAssetBalances();
+    
+    //@ts-ignore
     const builder = newOpRequestBuilder(this.provider, this.config.chainId).use(
       Erc20Plugin
     );
@@ -118,6 +119,7 @@ export class WithdrawalClient {
         `\tadding withdrawal for asset with contract address ${asset.assetAddr}...`
       );
       if (balance > 0n) {
+      //@ts-ignore
         builder.erc20Transfer(asset.assetAddr, this.eoa.address, balance);
         hasFundsToWithdraw = true;
       }

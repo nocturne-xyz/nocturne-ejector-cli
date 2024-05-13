@@ -8,6 +8,9 @@
     "dist/**/*",
     "src/**/*"
   ],
+  "bin": {
+    "nocturne-ejector-cli": "dist/index.js"
+  },
   "scripts": {
     "build": "yarn clean; tsc --build",
     "check": "yarn clean && tsc --noEmit",

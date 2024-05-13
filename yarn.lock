@@ -904,24 +904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nocturne-xyz/client@npm:^4.1.2-alpha.0":
-  version: 4.1.2-alpha.0
-  resolution: "@nocturne-xyz/client@npm:4.1.2-alpha.0"
-  dependencies:
-    "@nocturne-xyz/config": ^1.7.3
-    "@nocturne-xyz/contracts": ^3.0.0
-    "@nocturne-xyz/core": ^3.4.0-alpha.0
-    "@nocturne-xyz/crypto": ^0.4.2
-    async-mutex: ^0.4.0
-    big-integer: ^1.6.42
-    bigint-json-serialization: ^1.0.1
-    ethers: ^5.7.2
-    js-sha256: ^0.9.0
-  checksum: f23cbd373f04d2bfb5586101eaa296289ebe5b7585e4c1b07ff46cc4fb07830421a79b8d3c6443b31b4ee9e6b2aa22f0daf7590b22c5b00722d72fe5576c9576
-  languageName: node
-  linkType: hard
-
-"@nocturne-xyz/client@npm:^4.1.2-alpha.1":
+"@nocturne-xyz/client@npm:^4.1.2-alpha.0, @nocturne-xyz/client@npm:^4.1.2-alpha.1":
   version: 4.1.2-alpha.1
   resolution: "@nocturne-xyz/client@npm:4.1.2-alpha.1"
   dependencies:
@@ -1041,6 +1024,8 @@ __metadata:
     redis-memory-server: ^0.6.0
     tsx: ^4.7.3
     typescript: ^4.8.4
+  bin:
+    nocturne-ejector-cli: dist/index.js
   languageName: unknown
   linkType: soft
 

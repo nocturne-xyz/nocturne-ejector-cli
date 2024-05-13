@@ -11,6 +11,14 @@ export const ARTIFACTS_DIR = `${ROOT_DIR}/artifacts`;
 
 export const SUBGRAPH_URL = "http://localhost:8000/subgraphs/name/nocturne";
 
+export const CIRCUIT_ARTIFACTS = {
+  joinSplit: {
+    wasm: "joinsplit/joinsplit.wasm",
+    zkey: "joinsplit/joinsplit.zkey",
+    vkey: "joinsplit/joinsplitVkey.json",
+  },
+};
+
 export async function runCommand(
   cmd: string,
   cwd?: string
