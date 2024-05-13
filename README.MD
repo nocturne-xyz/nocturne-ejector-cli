@@ -2,7 +2,7 @@
 
 Since [Nocturne is shutting down](TODO), all off-chain infrastructure run by Nocturne Labs, including the frontend, will be turned off. However, the contract still lives on-chain, so you can still withdraw your funds by interacting with it directly. This CLI is a tool that automates this, withdrawing all funds from the protocol (leaving no dust whatsoever) to a target EOA.
 
-> Before starting, please read this README in full.
+*Before starting, please read this README in full.*
 
 ### Prerequisites
 
@@ -19,7 +19,7 @@ And you must have access to the following:
 * The Ethereum account you used to derive your Nocturne account. For more information about what this is, see our [docs](https://nocturne-xyz.gitbook.io/nocturne/users/metamask-snap).
 * An RPC node. You can find publicly-accessible nodes [here](https://ethereumnodes.com/), though we reccomend [setting up a free alchemy account](https://www.alchemy.com/overviews/private-rpc-endpoint) because we make a lot of calls to the node when syncing.
 
-> Note that the process will involve exporting your private key and passing it into the CLI's via an environment variable. To stay safe, **we strongly reccomend you use a "burner" wallet to withdraw**.
+Note that the process will involve exporting your private key and passing it into the CLI's via an environment variable. To stay safe, **we strongly reccomend you use a "burner" wallet to withdraw**.
 
 ## Usage
 
