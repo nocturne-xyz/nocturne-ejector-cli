@@ -25,7 +25,7 @@ And you must have access to the following:
 
 ### Setup
 
-After the cloning the repo, fire up a terminal and do the following to set up the CLI:
+After the cloning the repo, open a terminal and do the following to set up the CLI:
 1. run `git submodule init`
 2. run `git submodule update --remote`
 3. run `corepack enable`
@@ -39,10 +39,11 @@ After the cloning the repo, fire up a terminal and do the following to set up th
 3. Collect and fill in the values.
 
 To get `SPEND_PRIVATE_KEY`, run `nocturne-ejector-cli export-spend-key`. This will locally host a UI (only on your machine) that you can use to export your Nocturne Spending Key. Then do the following:
-	1. Open your browser and go to `http://localhost:3000` to open the UI
-	2. Connect to MetaMask from the acconut you originally used to set up your Nocturne account
-	3. Sign the key generation message to re-derive your spend key.
-	4. You should now see your spending key as a hex string. Copy it into the `SPEND_PRIVATE_KEY` field inside your `.env` file.
+1. Open your browser and go to `http://localhost:3000` to open the UI
+2. Connect to MetaMask from the acconut you originally used to set up your Nocturne account
+3. Sign the key generation message to re-derive your spend key.
+4. You should now see your spending key as a hex string. Copy it into the `SPEND_PRIVATE_KEY` field inside your `.env` file.
+5. Press Ctrl-C in your terminal to stop the frontend once you're done.
 
 To get `WITHDRAWAL_EOA_PRIVATE_KEY`, export the private key for the EOA you're using to withdraw and paste it into the `WITHDRAWAL_EOA_PRIVATE_KEY` field inside your `.env` file.
 
