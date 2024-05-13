@@ -1,7 +1,6 @@
-import { setup, startCli } from "./src/index";
+import { startCli } from "./src/index";
 
 async function main() {
-  await setup();
   await startCli();
 }
 
