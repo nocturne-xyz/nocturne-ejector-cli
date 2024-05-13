@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 import { program, Command } from "commander";
-import { setup } from "./setup";
 import { WithdrawalClient } from "./withdraw";
 import * as dotenv from "dotenv";
 import { runCommand } from "./utils";
@@ -32,9 +31,6 @@ const withdraw = new Command("withdraw")
   )
   .action(async (options) => {
     const { configPath, rpcSyncThrottle } = options;
-
-    // download any artifacts necessary for withdrawal, including circuits
-    await setup();
 
     // instantiate the withdrawal client with given config
     const client = new WithdrawalClient(configPath);
