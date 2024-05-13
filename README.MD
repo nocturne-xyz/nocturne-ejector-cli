@@ -49,4 +49,4 @@ To get `RPC_URL`, find the URL of the RPC node you prepared in the [prerequisite
 
 Once you've filled your `.env` file, all you need to do is `nocturne-ejector-cli withdraw`. It will sync your balances and kick off a single transaction that withdraws all of your funds from nocturne to the withdrawal EOA in a single transaction.
 
-> Tip: if sync is failing, it's likely due to the CLI overloading your RPC node. Try running with a longer delay between RPC calls. You can set this by running the withdraw command with `--rpc-sync-throttle DELAY_MS`, where `DELAY_MS` is the desired delay in milliseconds. By default it's 1000ms. For example, `nocturne-ejector-cli withdraw --rpc-sync-throttle 2000ms`.
+> Tip: if sync is failing, it's likely due to the CLI overloading your RPC node. Try running with a longer delay between RPC calls. You can set this by running the withdraw command with `--rpc-sync-throttle DELAY_MS`, where `DELAY_MS` is the desired delay in milliseconds. By default it's 1000ms. For example, `nocturne-ejector-cli withdraw --rpc-sync-throttle 2000`.
