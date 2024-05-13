@@ -28,7 +28,8 @@ export function getEnvVars(): EnvVars {
   if (!WITHDRAWAL_EOA_PRIVATE_KEY) {
     throw new Error("WITHDRAWAL_EOA_PRIVATE_KEY env var is not set!");
   }
-  if (!ethers.utils.isHexString(WITHDRAWAL_EOA_PRIVATE_KEY)) {
+
+  if (!ethers.utils.isBytesLike(WITHDRAWAL_EOA_PRIVATE_KEY)) {
     throw new Error(
       "WITHDRAWAL_EOA_PRIVATE_KEY env var is not a valid hex string!"
     );
