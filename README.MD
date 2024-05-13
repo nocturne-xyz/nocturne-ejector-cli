@@ -29,13 +29,6 @@ After the cloning the repo, fire up a terminal and do the following to set up th
 3. run `corepack enable`
 4. run `yarn install`
 
-### Overview
-
-Once you've set everything up, there two steps to withdrawing:
-
-1. Filling the `.env` file
-2. Withdrawing the funds
-
 ### Filling the `.env` file
 
 1. In the root directory of the repo, locate the file called `.env.example`. Within it there will be three empty variables: `SPEND_PRIVATE_KEY`, `RPC_URL`, and `WITHDRAWAL_EOA_PRIVATE_KEY`.
