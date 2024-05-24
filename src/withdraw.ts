@@ -47,7 +47,7 @@ export class WithdrawalClient {
   joinSplitProver: Thunk<JoinSplitProver>;
 
   constructor(networkNameOrConfigPath = "mainnet") {
-    const { RPC_URL, SPEND_PRIVATE_KEY, WITHDRAWAL_EOA_PRIVATE_KEY } = getEnvVars();
+    const { RPC_URL, NOCTURNE_SPENDING_KEY, WITHDRAWAL_ACCOUNT_PRIVATE_KEY } = getEnvVars();
 
     this.config = loadNocturneConfig(networkNameOrConfigPath);
 
@@ -57,8 +57,8 @@ export class WithdrawalClient {
     this.syncAdapter = new RPCSDKSyncAdapter(syncProvider, this.config.handlerAddress);
 
     this.provider = RPC_URL.startsWith("http") ? new ethers.providers.JsonRpcBatchProvider(RPC_URL) : new ethers.providers.WebSocketProvider(RPC_URL);
-    this.signer = new NocturneSigner(ethers.utils.arrayify(SPEND_PRIVATE_KEY));
-    this.eoa = new ethers.Wallet(WITHDRAWAL_EOA_PRIVATE_KEY, this.provider);
+    this.signer = new NocturneSigner(ethers.utils.arrayify(NOCTURNE_SPENDING_KEY));
+    this.eoa = new ethers.Wallet(WITHDRAWAL_ACCOUNT_PRIVATE_KEY, this.provider);
 
     this.db = new NocturneDB(new InMemoryKVStore());
     this.db.setCurrentTotalEntityIndex(TotalEntityIndexTrait.fromBlockNumber(this.config.startBlock, "UP_TO"));

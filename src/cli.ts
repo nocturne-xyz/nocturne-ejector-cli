@@ -19,7 +19,7 @@ export async function startCli(): Promise<void> {
 const withdraw = new Command("withdraw")
   .summary("withdraw from Nocturne post-shutdown")
   .description(
-    "must supply .env file with RPC_URL, SPEND_PRIVATE_KEY, and WITHDRAWAL_EOA_PRIVATE_KEY"
+    "must supply .env file with RPC_URL, NOCTURNE_SPENDING_KEY, and WITHDRAWAL_ACCOUNT_PRIVATE_KEY"
   )
   .option(
     "--config-path",
@@ -52,7 +52,7 @@ const withdraw = new Command("withdraw")
 const exportSpendKey = new Command("export-spend-key")
   .summary("locally run the nocturne spend key exporter UI")
   .description(
-    "The exporter UI allows you to get the spend key for nocturne accounts you own. Use this to get the `SPEND_PRIVATE_KEY` and then set it into your `.env` file."
+    "The exporter UI allows you to get the spend key for nocturne accounts you own. Use this to get the `NOCTURNE_SPENDING_KEY` and then set it into your `.env` file."
   )
   .action(async () => {
     console.log("starting spend key exporter UI at http://localhost:3000");
