@@ -27,7 +27,7 @@ const withdraw = new Command("withdraw")
   )
   .option(
     "--rpc-sync-throttle",
-    "minimum delay between RPC calls in milliseconds. This is useful for rate limiting your RPC calls to avoid getting rate limited by your RPC provider. Default is 1000ms",
+    "minimum delay between RPC calls in milliseconds. This is useful for rate limiting your RPC calls to avoid getting rate limited by your RPC provider. Default is 1000ms"
   )
   .action(async (options) => {
     const { configPath, rpcSyncThrottle } = options;
@@ -37,14 +37,19 @@ const withdraw = new Command("withdraw")
 
     // sync all note balances into the withdrawal client
     console.log();
-    console.log("syncing notes from RPC node. This make take a while...")
-    console.log(`latest merkle index on-chain: ${await client.syncAdapter.getLatestIndexedMerkleIndex()}`);
+    console.log("syncing notes from RPC node. This make take a while...");
+    console.log(
+      `latest merkle index on-chain: ${await client.syncAdapter.getLatestIndexedMerkleIndex()}`
+    );
 
-    const throttleMs = (typeof rpcSyncThrottle === "string") ? parseInt(rpcSyncThrottle) : (rpcSyncThrottle ?? 1000);
-    await client.sync( { throttleMs });
+    const throttleMs =
+      typeof rpcSyncThrottle === "string"
+        ? parseInt(rpcSyncThrottle)
+        : rpcSyncThrottle ?? 1000;
+    await client.sync({ throttleMs });
 
-    console.log('finished syncing')
-    console.log("withdrawing all funds from nocturne...")
+    console.log("finished syncing");
+    console.log("withdrawing all funds from nocturne...");
     // submit a single op that withdraws all notes of every asset owned by the nocturne acount with the provided spend key
     await client.withdrawEverything();
   });
@@ -56,5 +61,8 @@ const exportSpendKey = new Command("export-spend-key")
   )
   .action(async () => {
     console.log("starting spend key exporter UI at http://localhost:3000");
-    await runCommand("yarn install && yarn dev --port 3000", `${ROOT_DIR}/nocturne-ejector-ui`);
+    await runCommand(
+      "yarn install && yarn dev --port 3000",
+      `${ROOT_DIR}/nocturne-ejector-ui`
+    );
   });

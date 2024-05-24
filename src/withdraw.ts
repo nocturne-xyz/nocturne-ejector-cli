@@ -47,21 +47,33 @@ export class WithdrawalClient {
   joinSplitProver: Thunk<JoinSplitProver>;
 
   constructor(networkNameOrConfigPath = "mainnet") {
-    const { RPC_URL, NOCTURNE_SPENDING_KEY, WITHDRAWAL_ACCOUNT_PRIVATE_KEY } = getEnvVars();
+    const { RPC_URL, NOCTURNE_SPENDING_KEY, WITHDRAWAL_ACCOUNT_PRIVATE_KEY } =
+      getEnvVars();
 
     this.config = loadNocturneConfig(networkNameOrConfigPath);
 
     // use separate provider for syncing
     // determine kind by checking prefix, assume websocket if not http
-    const syncProvider = RPC_URL.startsWith("http") ? new ethers.providers.JsonRpcBatchProvider(RPC_URL) : new ethers.providers.WebSocketProvider(RPC_URL);
-    this.syncAdapter = new RPCSDKSyncAdapter(syncProvider, this.config.handlerAddress);
+    const syncProvider = RPC_URL.startsWith("http")
+      ? new ethers.providers.JsonRpcBatchProvider(RPC_URL)
+      : new ethers.providers.WebSocketProvider(RPC_URL);
+    this.syncAdapter = new RPCSDKSyncAdapter(
+      syncProvider,
+      this.config.handlerAddress
+    );
 
-    this.provider = RPC_URL.startsWith("http") ? new ethers.providers.JsonRpcBatchProvider(RPC_URL) : new ethers.providers.WebSocketProvider(RPC_URL);
-    this.signer = new NocturneSigner(ethers.utils.arrayify(NOCTURNE_SPENDING_KEY));
+    this.provider = RPC_URL.startsWith("http")
+      ? new ethers.providers.JsonRpcBatchProvider(RPC_URL)
+      : new ethers.providers.WebSocketProvider(RPC_URL);
+    this.signer = new NocturneSigner(
+      ethers.utils.arrayify(NOCTURNE_SPENDING_KEY)
+    );
     this.eoa = new ethers.Wallet(WITHDRAWAL_ACCOUNT_PRIVATE_KEY, this.provider);
 
     this.db = new NocturneDB(new InMemoryKVStore());
-    this.db.setCurrentTotalEntityIndex(TotalEntityIndexTrait.fromBlockNumber(this.config.startBlock, "UP_TO"));
+    this.db.setCurrentTotalEntityIndex(
+      TotalEntityIndexTrait.fromBlockNumber(this.config.startBlock, "UP_TO")
+    );
     this.client = new NocturneClient(
       this.signer,
       this.provider,
@@ -97,7 +109,7 @@ export class WithdrawalClient {
 
   async withdrawEverything(): Promise<void> {
     const balances = await this.client.getAllAssetBalances();
-    
+
     //@ts-ignore
     const builder = newOpRequestBuilder(this.provider, this.config.chainId).use(
       Erc20Plugin
@@ -119,7 +131,7 @@ export class WithdrawalClient {
         `\tadding withdrawal for asset with contract address ${asset.assetAddr}...`
       );
       if (balance > 0n) {
-      //@ts-ignore
+        //@ts-ignore
         builder.erc20Transfer(asset.assetAddr, this.eoa.address, balance);
         hasFundsToWithdraw = true;
       }
@@ -144,30 +156,43 @@ export class WithdrawalClient {
     console.log("estimating gas for batch-withdrawal transaction...");
     // Calculate total gas limit based on op data because eth_estimateGas is not predictable for
     // processBundle
-    const gasLimit = maxGasForOperation(provenOp); 
+    const gasLimit = maxGasForOperation(provenOp);
     const gasPrice = await this.provider.getGasPrice();
     console.log("gas price:", gasPrice.toString());
-    console.log(`estimated gas limit: ${gasLimit.toString()} (${ethers.utils.formatEther((gasLimit * gasPrice.toBigInt()).toString())} ETH)`);
-    console.log("note: the gas limit is a very conservative estimate, in practice the gas cost will likely be lower");
+    console.log(
+      `estimated gas limit: ${gasLimit.toString()} (${ethers.utils.formatEther(
+        (gasLimit * gasPrice.toBigInt()).toString()
+      )} ETH)`
+    );
+    console.log(
+      "note: the gas limit is a very conservative estimate, in practice the gas cost will likely be lower"
+    );
 
-    await inquirer.prompt([{
-      type: "confirm",
-      name: "confirm",
-      message: "approve the transaction?",
-      default: false
-    }]).then(async (answers) => {
-      if (answers.confirm) {
-        console.log("submitting batch-withdrawal transaction...");
-        const tx = await this.teller.processBundle({
-          operations: [provenOp],
-        }, { gasLimit });
-        console.log(`transaction submitted with hash: ${tx.hash}`);
-        console.log("waiting 3 confirmations...");
-        await tx.wait(3);
-        console.log("withdrawal complete!");
-      } else {
-        console.log("withdrawal cancelled");
-      }
-    });
+    await inquirer
+      .prompt([
+        {
+          type: "confirm",
+          name: "confirm",
+          message: "approve the transaction?",
+          default: false,
+        },
+      ])
+      .then(async (answers) => {
+        if (answers.confirm) {
+          console.log("submitting batch-withdrawal transaction...");
+          const tx = await this.teller.processBundle(
+            {
+              operations: [provenOp],
+            },
+            { gasLimit }
+          );
+          console.log(`transaction submitted with hash: ${tx.hash}`);
+          console.log("waiting 3 confirmations...");
+          await tx.wait(3);
+          console.log("withdrawal complete!");
+        } else {
+          console.log("withdrawal cancelled");
+        }
+      });
   }
 }

@@ -23,8 +23,8 @@ export function getEnvVars(): EnvVars {
     throw new Error("NOCTURNE_SPENDING_KEY env var is not a valid hex string!");
   }
 
-
-  const WITHDRAWAL_ACCOUNT_PRIVATE_KEY = process.env.WITHDRAWAL_ACCOUNT_PRIVATE_KEY;
+  const WITHDRAWAL_ACCOUNT_PRIVATE_KEY =
+    process.env.WITHDRAWAL_ACCOUNT_PRIVATE_KEY;
   if (!WITHDRAWAL_ACCOUNT_PRIVATE_KEY) {
     throw new Error("WITHDRAWAL_ACCOUNT_PRIVATE_KEY env var is not set!");
   }
